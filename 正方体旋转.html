@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			background-color: #000;
+			-webkit-perspective:1000px;
+		}
+		#container{
+			width: 200px;
+			height: 200px;
+			margin: 200px auto;
+			position: relative;
+			-webkit-animation: rotate 3s linear infinite;
+			-webkit-transform-style: preserve-3d;
+		}
+
+		@-webkit-keyframes rotate{
+			from{}
+			to{
+				-webkit-transform: rotateY(360deg);
+			}
+		}
+		
+		.cude{
+			width: 200px;
+			height: 200px;
+			background-color: #ccc;
+			border-radius: 10px;
+			border: 2px solid rgba(255,255,255,.6); 
+			opacity: .5;
+			line-height: 200px;
+			text-align: center;
+			font-size: 60px;
+			position: absolute;
+		}
+		.one{
+			-webkit-transform:rotateY(180deg) translateZ(100px);
+		}
+		.two{
+			-webkit-transform:rotateY(90deg) translateZ(100px);
+		}
+		.three{
+			-webkit-transform:rotateY(-90deg) translateZ(100px);
+		}
+		.four{
+			-webkit-transform: rotateX(90deg) translateZ(100px);
+		}
+		.five{
+			-webkit-transform: rotateX(-90deg) translateZ(100px);
+		}
+		.six{
+			-webkit-transform: translateZ(100px);
+		}
+
+	</style>
+</head>
+<body>
+	<div id="container">
+		<div class="cude one">1</div>
+		<div class="cude two">2</div>
+		<div class="cude three">3</div>
+		<div class="cude four">4</div>
+		<div class="cude five">5</div>
+		<div class="cude six">6</div>
+	</div>
+</body>
+</html>
