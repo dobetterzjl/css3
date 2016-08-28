@@ -1,0 +1,213 @@
+<<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>照片墙</title>
+	<style type="text/css">
+		body{
+			background: url(img/bg.jpg);
+		}
+		#container{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top:0;
+			left: 0;
+		}
+		#container .img{
+			width: 125px;
+			height: 125px;
+			border: 5px solid #fff;
+			-webkit-box-shadow:2px 2px 2px rgba(0,0,0,.6);
+			position: absolute;
+			top: -500px;
+			left: -500px;
+			background-repeat: no-repeat;
+			-webkit-transition:all 1s ease-in-out;
+			-moz-transition:all 1s ease-in-out;
+			-ms-transition:all 1s ease-in-out;
+			-o-transition:all 1s ease-in-out;
+			transition: all 1s ease-in-out;
+		}
+		#container span{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			background-repeat: no-repeat;
+			opacity: 0;
+			-webkit-transition:all 1s ease-in-out;
+			-moz-transition:all 1s ease-in-out;
+			-ms-transition:all 1s ease-in-out;
+			-o-transition:all 1s ease-in-out;
+			transition: all 1s ease-in-out;
+		}
+		#prev,#next{
+			width:60px;
+			height: 60px;
+			background-color: #fff;
+			opacity: .8;
+			position: absolute;
+			top: 50%;
+			margin-top: -30px;
+			font-size: 20px;
+			line-height: 60px;
+			text-align: center;
+			display: none;
+		}
+		#prev{
+			left: -20px;
+			border-radius: 0 5px 5px 0;
+		}
+		#next{
+			right: -20px;
+			border-radius: 5px 0 0 5px;
+		}
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+	<span id="prev">&lt;</span>
+	<span id="next">&gt;</span>
+	<script type="text/javascript">
+		(function(){
+			var ROW=4,
+				COL=6,
+				NUM=ROW*COL,
+				BIG_IMG_WIDTH=750,
+				BIG_IMG_HEIGHT=500,
+				THUMBS_IMG_WIDHT=125,
+				THUMBS_IMG_HEIGHT=125;
+			var index=0;
+			var count=0;
+			var aImg=document.getElementsByClassName('img');
+			var oContainer=document.getElementById('container');
+			var oPrev=document.getElementById('prev');
+			var oNext=document.getElementById('next');
+			var iColGap=(oContainer.offsetWidth-THUMBS_IMG_WIDHT*COL)/(COL+1);
+			var iROWGap=(oContainer.offsetHeight-THUMBS_IMG_HEIGHT*ROW)/(ROW+1);
+				for(var i=0;i<NUM;i++){
+					
+					var thumbImg= new Image();
+					thumbImg.onload=function(){
+						count++;
+						if(count==2*NUM){
+							loadSucess();
+						}
+						
+					};
+					thumbImg.src='img/thumbs/'+(i+1)+'.jpg';
+					var bigImg= new Image();
+					bigImg.onload=function(){
+						count++;
+						if(count==2*NUM){
+							loadSucess();
+						}
+					};
+					bigImg.src='img/'+(i+1)+'.jpg';
+
+				}
+
+
+
+				function loadSucess(){
+					for(i=0;i<ROW; i++){
+						for(j=0;j<COL; j++){
+							index++;
+							var oDiv = document.createElement('div');
+							oDiv.className='img';
+							oDiv.style.width=THUMBS_IMG_WIDHT+'px';
+							oDiv.style.height=THUMBS_IMG_HEIGHT+'px';
+							oDiv.innerHTML='<span></span>';
+							oDiv.style.backgroundImage='url(img/thumbs/'+index+'.jpg)';
+							
+							oDiv.pos={
+								row:i,
+								col:j,
+								top:i*(iROWGap+THUMBS_IMG_HEIGHT)+iROWGap,
+								left:j*(iColGap+THUMBS_IMG_WIDHT)+iColGap
+
+							}
+							oContainer.appendChild(oDiv);
+							oDiv.index=index;
+
+							
+						}
+
+					}
+
+
+					var timer=setInterval(function(){
+						aImg[--index].style.left=aImg[index].pos.left+'px';
+						aImg[index].style.top=aImg[index].pos.top+'px';
+						aImg[index].style.WebkitTransform='rotate('+(Math.random()*40-20)+'deg)';
+						// setStyle(aImg[index], 'transform', 'rotate('+ (Math.random() * 40 - 20 ) +'deg)');
+						if (index==0) {
+						clearInterval(timer);
+					}
+					},100);
+					
+
+				}
+
+				var bClick=false;//没被点击过
+				 // function setStyle(elem, prop, val){
+     //            ['Webkit', 'Moz', 'Ms', 'O', ''].forEach(function(prefix){
+     //                elem.style[prefix + prop.charAt(0).toUpperCase() + prop.substring(1)] = val;
+     //            });
+     //        }
+     		var nowIdx=0;
+     		oContainer.onclick=function(e){
+     			var target=e.target;
+     			if(target!=oContainer){
+     				if(bClick){//被点击过，现在是大图，需要分散
+     					
+
+     				}else{//现在是小图，需要合并
+     					var bigImgpos = {
+     						left : (oContainer.offsetWidth-COL*THUMBS_IMG_WIDHT)/2,
+     						top : (oContainer.offsetHeight-ROW*THUMBS_IMG_HEIGHT)/2
+     					}
+     					for(var i=0;i<NUM; i++){
+     						aImg[i].style.left = bigImgpos.left + 
+     						THUMBS_IMG_WIDHT * aImg[i].pos.col + 'px';
+        
+     						aImg[i].style.top= bigImgpos.top+THUMBS_IMG_HEIGHT*aImg[i].pos.row+'px';
+     						aImg[i].style.borderWidth='1px';
+     						aImg[i].style.WebkitTransform='rotate(0deg)';
+     						var oSpan=aImg[i].getElementsByTagName('span')[0];
+     						oSpan.style.backgroundImage='url(img/'+target.parentNode.index+'.jpg)';
+     						  oSpan.style.backgroundPosition = -aImg[i].pos.col * THUMBS_IMG_WIDHT + 'px '
+                                    + (-aImg[i].pos.row * THUMBS_IMG_HEIGHT) + 'px';
+                               // oSpan.style.backgroundPosition = -aImg[i].pos.col * THUMBS_IMG_WIDHT + 'px'
+                               // 		+(-aImg[i].pos.row *THUMBS_IMG_HEIGHT) + 'px';     
+     							oSpan.style.opacity=1;
+
+
+     					}
+     					oPrev.style.display=oNext.style.display='block';
+     					nowIdx=target.parentNode.index;
+
+
+     				}
+     			}
+
+     		};
+     		oPrev.onclick=oNext.onclick=function(){
+     			if (this==oPrev) {
+
+     			}else if(this==oNext){
+     				nowIdx++;
+     				if (nowIdx==aImg.length) {
+     					nowIdx=0;
+     				}
+     				oSpan.style.backgroundImage='img/'+nowIdx+'.jpg';
+     			}
+     		};
+
+
+
+
+		})();
+	</script>
+</body>
+</html>
