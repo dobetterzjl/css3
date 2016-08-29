@@ -160,7 +160,15 @@
      			var target=e.target;
      			if(target!=oContainer){
      				if(bClick){//被点击过，现在是大图，需要分散
-     					
+     					for(var i=0;i<NUM;i++){
+     						aImg[i].style.left=aImg[i].pos.left+'px';
+     						aImg[i].style.top=aImg[i].pos.top + 'px';
+     						aImg[i].style.WebkitTransform='rotate('+  (Math.random()*40-20)+'deg)';
+     						aImg[i].style.borderWidth='5px';
+     						var oSpan=aImg[i].getElementsByTagName('span')[0];
+     						oSpan.style.opacity=0;
+
+     					}
 
      				}else{//现在是小图，需要合并
      					var bigImgpos = {
@@ -190,11 +198,15 @@
 
      				}
      			}
-
+     			bClick=!bClick;
      		};
      		oPrev.onclick=oNext.onclick=function(){
      			if (this==oPrev) {
-
+     				nowIdx--;
+     				if (nowIdx==-1) {
+     					nowIdx=aImg.length;
+     				}
+     				oSpan.style.backgroundImage='img/'+nowIdx+'.jpg';
      			}else if(this==oNext){
      				nowIdx++;
      				if (nowIdx==aImg.length) {
@@ -202,6 +214,7 @@
      				}
      				oSpan.style.backgroundImage='img/'+nowIdx+'.jpg';
      			}
+     			oSpan.style.opacity=1;
      		};
 
 
