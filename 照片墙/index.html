@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -52,22 +52,37 @@
 			font-size: 20px;
 			line-height: 60px;
 			text-align: center;
-			display: none;
+			opacity: 0;
+			background-repeat: no-repeat;
+			background-position: center;
+			-webkit-transition:all 1s ease-in-out;
+			-moz-transition:all 1s ease-in-out;
+			-ms-transition:all 1s ease-in-out;
+			-o-transition:all 1s ease-in-out;
+			transition: all 1s ease-in-out;
 		}
 		#prev{
 			left: -20px;
+			-webkit-border-radius:0 5px 5px 0;
+			-moz-border-radius:0 5px 5px 0;
+			-o-border-radius:0 5px 5px 0;
+			-ms-border-radius: 0 5px 5px 0;
 			border-radius: 0 5px 5px 0;
+			background-image: url(img/prev.png);
 		}
 		#next{
 			right: -20px;
+			-webkit-border-radius: 5px 0 0 5px;
+			-moz-border-radius:5px 0 0 5px;
 			border-radius: 5px 0 0 5px;
+			background-image:url(img/next.png);
 		}
 	</style>
 </head>
 <body>
 	<div id="container"></div>
-	<span id="prev">&lt;</span>
-	<span id="next">&gt;</span>
+	<span id="prev"></span>
+	<span id="next"></span>
 	<script type="text/javascript">
 		(function(){
 			var ROW=4,
@@ -169,6 +184,7 @@
      						oSpan.style.opacity=0;
 
      					}
+     					oPrev.style.opacity=oNext.style.opacity=0;
 
      				}else{//现在是小图，需要合并
      					var bigImgpos = {
@@ -192,7 +208,7 @@
 
 
      					}
-     					oPrev.style.display=oNext.style.display='block';
+     					oPrev.style.opacity=oNext.style.opacity=1;
      					nowIdx=target.parentNode.index;
 
 
@@ -201,20 +217,40 @@
      			bClick=!bClick;
      		};
      		oPrev.onclick=oNext.onclick=function(){
+     			
      			if (this==oPrev) {
      				nowIdx--;
-     				if (nowIdx==-1) {
-     					nowIdx=aImg.length;
+     				if (nowIdx==0)//图片索引从1开始
+     				 {
+     					nowIdx=NUM;
      				}
-     				oSpan.style.backgroundImage='img/'+nowIdx+'.jpg';
      			}else if(this==oNext){
      				nowIdx++;
-     				if (nowIdx==aImg.length) {
-     					nowIdx=0;
+     				if (nowIdx==NUM+1) {
+     					nowIdx=1;
      				}
-     				oSpan.style.backgroundImage='img/'+nowIdx+'.jpg';
      			}
-     			oSpan.style.opacity=1;
+     			var arr=[];
+     			for (var i = 0; i < aImg.length; i++) {
+     				arr.push(i);
+     			}
+     			arr.sort(function(){
+     				return Math.random()-0.5;
+     			});
+     			var timer=setInterval(function(){
+     				var temp=arr.pop();//
+     				console.log(temp);
+     				//for (var i = 0; i < aImg.length; i++) {
+     				var oSpan=aImg[temp].getElementsByTagName('span')[0];
+     				  oSpan.style.backgroundImage='url(img/'+nowIdx+'.jpg)';
+     			      oSpan.style.opacity=1;
+     			//}
+     			if (arr.length==0) {
+     				clearInterval(timer);
+     			}
+     			
+     			},30);
+     			
      		};
 
 
