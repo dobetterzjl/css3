@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		#storage{
+			width: 1000px;
+			height: 300px;
+			margin: 100px auto;
+			background-color: #ccc;
+			border-radius: 10px;
+			box-shadow: 0 0 2px 3px rgba(0,0,0,0.5);
+			position: relative;
+			-webkit-perspective:800px;
+			-webkit-perspective-origin:50% -25%;
+
+		}
+		#container{
+			width: 120px;
+			height: 100px;
+			-webkit-transform-style:preserve-3d;
+			-ms-transform-style:preserve-3d;
+			-moz-transform-style:preserve-3d;
+			-o-transform-style:preserve-3d;
+			transform-style:preserve-3d;
+			position: absolute;
+			left: 50%;
+			margin-left: -60px;
+			top: 50px;
+			transition: transform 1s ease;
+
+
+		}
+		#container img{
+			width: 120px;
+			height: 100px;
+			position: absolute;
+			transition: transform 1s ease 
+		}
+	</style>
+</head>
+<body>
+<div id="storage">
+	<div id="container"></div>
+</div>
+	<script type="text/javascript">
+		//var oContainer = document.getElementById('container');
+		var oContainer=document.querySelector('#container');
+		var transform =function(element,value,key){
+			var key=key||"Transform";
+			['Ms','Moz','Webkit','O',''].forEach(function(prefix){
+				element.style[prefix+key]=value;
+			});
+			return element;
+		};
+		//var aI=document.querySelectorAll('.aa');
+		//var html='';
+		var count=0;
+		for(var i=0;i<9;i++){
+			var oImg = new Image();
+			oContainer.appendChild(oImg);
+			oImg.onload=function(){
+				count++;
+				if (count==9) {
+					var aImg=oContainer.getElementsByTagName('img');
+						for(var i=0;i<aImg.length;i++){
+							(function(ind){
+							setTimeout(function(){
+								// aImg[ind].style.WebkitTransform='rotateY('+40*ind+'deg) translateZ(192px)';
+								transform(aImg[ind],'rotateY('+40*ind+'deg) translateZ(192px)');
+							},100*(9-ind));	
+							})(i);
+							
+						}
+						var index=0;
+		oContainer.onclick=function(){
+			index++;
+			//this.style.WebkitTransform='rotateY('+index*40+'deg)'
+			transform(this,'rotateY('+index*40+'deg)')
+		};
+				}
+
+			};
+			oImg.src="image/"+(i+1)+".jpg";
+			// html+='<img style="rotateY('+40*i+'deg)" src="image/'+(i+1)+'.jpg"/>';
+		}
+		//oContainer.innerHTML=html;
+		// var aImg=oContainer.getElementsByTagName('img');
+		// for(var i=0;i<aImg.length;i++){
+		// 	(function(ind){
+		// 	setTimeout(function(){
+		// 		aImg[ind].style.WebkitTransform='rotateY('+40*ind+'deg) translateZ(192px)';
+		// 	},100*(9-ind));	
+		// 	})(i);
+			
+		// }
+		// var index=0;
+		// oContainer.onclick=function(){
+		// 	index++;
+		// 	this.style.WebkitTransform='rotateY('+index*40+'deg)'
+		// };
+	</script>
+</body>
+</html>
